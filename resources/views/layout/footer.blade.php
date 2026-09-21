@@ -62,8 +62,8 @@
                                 </button>
                             </h3>
                             <ul class="footer__widget--menu footer__widget--inner">
-                                <li class="footer__widget--menu__list"><a class="footer__widget--menu__text text-white" href="about.html">About Us</a></li>
-                                <li class="footer__widget--menu__list"><a class="footer__widget--menu__text text-white" href="contact.html">Contact Us</a></li>
+                                <li class="footer__widget--menu__list"><a class="footer__widget--menu__text text-white" href="{{ route('about') }}">About Us</a></li>
+                                <li class="footer__widget--menu__list"><a class="footer__widget--menu__text text-white" href="{{ route('contact') }}">Contact Us</a></li>
                                 <li class="footer__widget--menu__list"><a class="footer__widget--menu__text text-white" href="wishlist.html">Wishlist</a></li>
                                 <li class="footer__widget--menu__list"><a class="footer__widget--menu__text text-white" href="portfolio.html">Portfolio</a></li>
                                 <li class="footer__widget--menu__list"><a class="footer__widget--menu__text text-white" href="privacy-policy.html">Privacy Policy</a></li>

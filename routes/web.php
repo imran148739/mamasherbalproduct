@@ -2,15 +2,19 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\BestSellingController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HomeContentController;
 use App\Http\Controllers\Admin\HomeSectionItemController;
+use App\Http\Controllers\Admin\PageContentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Models\Category;
 use App\Models\HomePageContent;
 use App\Models\HomeSectionItem;
 use App\Models\Product;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Artisan;
 
@@ -39,6 +43,13 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
+Route::get('/search', [SearchController::class, 'search'])->name('search');
+Route::get('/api/search/suggest', [SearchController::class, 'suggest'])->name('search.suggest');
+Route::get('/best-selling', [ShopController::class, 'bestSelling'])->name('best-selling');
+Route::get('/about-us', [PageController::class, 'about'])->name('about');
+Route::get('/about.html', fn() => redirect()->route('about'));
+Route::get('/contact-us', [PageController::class, 'contact'])->name('contact');
+Route::get('/contact.html', fn() => redirect()->route('contact'));
 Route::get('/product/{slug}', [ShopController::class, 'show'])->name('product.detail');
 Route::get('/product-details/{slug}', [ShopController::class, 'show']);
 Route::get('/product-details.html', function () {
@@ -74,6 +85,19 @@ Route::prefix('admin')->group(function () {
         Route::get('/home-content',                 [HomeContentController::class, 'index'])->name('admin.home-content.index');
         Route::get('/home-content/{section}/edit',  [HomeContentController::class, 'edit'])->name('admin.home-content.edit');
         Route::post('/home-content/{section}',      [HomeContentController::class, 'update'])->name('admin.home-content.update');
+
+        // Best Selling Items Management (curated from Product Master)
+        Route::get('/best-selling',                       [BestSellingController::class, 'index'])->name('admin.best-selling.index');
+        Route::post('/best-selling',                      [BestSellingController::class, 'store'])->name('admin.best-selling.store');
+        Route::put('/best-selling/{id}/order',            [BestSellingController::class, 'updateOrder'])->name('admin.best-selling.order');
+        Route::post('/best-selling/{id}/toggle',           [BestSellingController::class, 'toggle'])->name('admin.best-selling.toggle');
+        Route::delete('/best-selling/{id}',               [BestSellingController::class, 'destroy'])->name('admin.best-selling.destroy');
+
+        // About Us & Contact Us Content Management
+        Route::get('/pages/about-us',                     [PageContentController::class, 'editAbout'])->name('admin.about.edit');
+        Route::post('/pages/about-us',                    [PageContentController::class, 'updateAbout'])->name('admin.about.update');
+        Route::get('/pages/contact-us',                   [PageContentController::class, 'editContact'])->name('admin.contact.edit');
+        Route::post('/pages/contact-us',                  [PageContentController::class, 'updateContact'])->name('admin.contact.update');
 
         // ─── Master Catalog Management (Categories & Products) ───
         Route::prefix('master')->group(function () {

@@ -14,9 +14,22 @@
                 <div>
                     <h2 style="font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 4px;">{{ $config['name'] }}</h2>
                     <p style="color: var(--text-secondary); font-size: 13px; max-width: 600px;">{{ $config['description'] }}</p>
+                    @if($section === 'hero_slider' || isset($config['image_size']))
+                        <div style="margin-top: 6px;">
+                            <span class="badge" style="background: rgba(78, 205, 196, 0.15); color: #4ecdc4; border: 1px solid rgba(78, 205, 196, 0.35); font-size: 11px; padding: 3px 10px; border-radius: 6px; font-weight: 700;">
+                                📐 Recommended Slide Image Size: {{ $config['image_size'] ?? '1521 × 515 px' }}
+                            </span>
+                        </div>
+                    @elseif($section === 'best_selling')
+                        <div style="margin-top: 6px;">
+                            <span class="badge" style="background: rgba(78, 205, 196, 0.15); color: #4ecdc4; border: 1px solid rgba(78, 205, 196, 0.35); font-size: 11px; padding: 3px 10px; border-radius: 6px; font-weight: 700;">
+                                📐 Recommended Product Image Size: 278 &times; 278 px
+                            </span>
+                        </div>
+                    @endif
                 </div>
             </div>
-            <div style="display: flex; gap: 12px;">
+            <div style="display: flex; gap: 12px; align-items: center;">
                 <button type="button" class="btn btn--primary" onclick="openAddModal()">
                     ➕ Add New {{ $config['singular'] }}
                 </button>
@@ -350,22 +363,52 @@
                     {{-- Primary Image --}}
                     @if(isset($config['fields']['image']))
                         <div class="form-group" id="add_image_group">
-                            <label class="form-label" id="add_image_label">{{ $config['fields']['image']['label'] }} <span style="color: var(--red);" id="add_image_required_star">*</span></label>
+                            <label class="form-label" id="add_image_label" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+                                <span>{{ $config['fields']['image']['label'] }} <span style="color: var(--red);" id="add_image_required_star">*</span></span>
+                                @if($section === 'hero_slider')
+                                    <span class="badge" style="background: rgba(78, 205, 196, 0.15); color: #4ecdc4; border: 1px solid rgba(78, 205, 196, 0.35); font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600;">
+                                        Recommended: 1521 &times; 515 px
+                                    </span>
+                                @elseif($section === 'best_selling')
+                                    <span class="badge" style="background: rgba(78, 205, 196, 0.15); color: #4ecdc4; border: 1px solid rgba(78, 205, 196, 0.35); font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600;">
+                                        Recommended: 278 &times; 278 px
+                                    </span>
+                                @endif
+                            </label>
                             <div id="add_image_preview_wrap" style="display:none;margin-bottom:8px;">
                                 <img id="add_image_preview" src="" style="width:70px;height:70px;object-fit:cover;border-radius:8px;border:2px solid rgba(78,205,196,0.4);" alt="Preview">
                                 <span style="font-size:11px;color:#4ecdc4;margin-left:8px;">From Master Catalog</span>
                             </div>
                             <input type="file" name="image" id="add_image_input" class="form-input" accept="image/*">
-                            <small style="color: var(--text-muted); font-size: 11px;">PNG, JPG, WEBP up to 25MB</small>
+                            <small style="color: var(--text-muted); font-size: 11px; display: block; margin-top: 4px;">
+                                PNG, JPG, WEBP up to 25MB
+                                @if($section === 'hero_slider')
+                                    &bull; <strong style="color: #4ecdc4;">Recommended size: 1521 &times; 515 px</strong>
+                                @elseif($section === 'best_selling')
+                                    &bull; <strong style="color: #4ecdc4;">Recommended size: 278 &times; 278 px</strong>
+                                @endif
+                            </small>
                         </div>
                     @endif
 
                     {{-- Secondary Image (e.g. Product hover) --}}
                     @if(isset($config['fields']['secondary_image']))
                         <div class="form-group">
-                            <label class="form-label">{{ $config['fields']['secondary_image']['label'] }} (Optional)</label>
+                            <label class="form-label" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+                                <span>{{ $config['fields']['secondary_image']['label'] }} (Optional)</span>
+                                @if($section === 'best_selling')
+                                    <span class="badge" style="background: rgba(78, 205, 196, 0.15); color: #4ecdc4; border: 1px solid rgba(78, 205, 196, 0.35); font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600;">
+                                        Recommended: 278 &times; 278 px
+                                    </span>
+                                @endif
+                            </label>
                             <input type="file" name="secondary_image" class="form-input" accept="image/*">
-                            <small style="color: var(--text-muted); font-size: 11px;">Displayed on product hover (up to 25MB)</small>
+                            <small style="color: var(--text-muted); font-size: 11px; display: block; margin-top: 4px;">
+                                Displayed on product hover (up to 25MB)
+                                @if($section === 'best_selling')
+                                    &bull; <strong style="color: #4ecdc4;">Recommended size: 278 &times; 278 px</strong>
+                                @endif
+                            </small>
                         </div>
                     @endif
 
@@ -589,12 +632,30 @@
                     {{-- Primary Image --}}
                     @if(isset($config['fields']['image']))
                         <div class="form-group">
-                            <label class="form-label">{{ $config['fields']['image']['label'] }}</label>
+                            <label class="form-label" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+                                <span>{{ $config['fields']['image']['label'] }}</span>
+                                @if($section === 'hero_slider')
+                                    <span class="badge" style="background: rgba(78, 205, 196, 0.15); color: #4ecdc4; border: 1px solid rgba(78, 205, 196, 0.35); font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600;">
+                                        Recommended: 1521 &times; 515 px
+                                    </span>
+                                @elseif($section === 'best_selling')
+                                    <span class="badge" style="background: rgba(78, 205, 196, 0.15); color: #4ecdc4; border: 1px solid rgba(78, 205, 196, 0.35); font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600;">
+                                        Recommended: 278 &times; 278 px
+                                    </span>
+                                @endif
+                            </label>
                             <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 8px;">
                                 <img id="editImagePreview" src="" class="table-thumb" style="width: 60px; height: 60px;" alt="Current Image">
-                                <div>
+                                <div style="flex: 1;">
                                     <input type="file" name="image" class="form-input" accept="image/*">
-                                    <small style="color: var(--text-muted); font-size: 11px;">PNG, JPG, WEBP up to 25MB. Leave empty to keep current image</small>
+                                    <small style="color: var(--text-muted); font-size: 11px; display: block; margin-top: 4px;">
+                                        PNG, JPG, WEBP up to 25MB. Leave empty to keep current image
+                                        @if($section === 'hero_slider')
+                                            &bull; <strong style="color: #4ecdc4;">Recommended size: 1521 &times; 515 px</strong>
+                                        @elseif($section === 'best_selling')
+                                            &bull; <strong style="color: #4ecdc4;">Recommended size: 278 &times; 278 px</strong>
+                                        @endif
+                                    </small>
                                 </div>
                             </div>
                         </div>
@@ -603,12 +664,24 @@
                     {{-- Secondary Image --}}
                     @if(isset($config['fields']['secondary_image']))
                         <div class="form-group">
-                            <label class="form-label">{{ $config['fields']['secondary_image']['label'] }}</label>
+                            <label class="form-label" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+                                <span>{{ $config['fields']['secondary_image']['label'] }}</span>
+                                @if($section === 'best_selling')
+                                    <span class="badge" style="background: rgba(78, 205, 196, 0.15); color: #4ecdc4; border: 1px solid rgba(78, 205, 196, 0.35); font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600;">
+                                        Recommended: 278 &times; 278 px
+                                    </span>
+                                @endif
+                            </label>
                             <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 8px;">
                                 <img id="editSecondaryImagePreview" src="" class="table-thumb" style="width: 60px; height: 60px;" alt="Secondary Image">
-                                <div>
+                                <div style="flex: 1;">
                                     <input type="file" name="secondary_image" class="form-input" accept="image/*">
-                                    <small style="color: var(--text-muted); font-size: 11px;">PNG, JPG, WEBP up to 25MB. Leave empty to keep current image</small>
+                                    <small style="color: var(--text-muted); font-size: 11px; display: block; margin-top: 4px;">
+                                        PNG, JPG, WEBP up to 25MB. Leave empty to keep current image
+                                        @if($section === 'best_selling')
+                                            &bull; <strong style="color: #4ecdc4;">Recommended size: 278 &times; 278 px</strong>
+                                        @endif
+                                    </small>
                                 </div>
                             </div>
                         </div>

@@ -68,7 +68,7 @@
                     <div class="card__header">
                         <div>
                             <div class="card__title">📸 Product Images (Form Repeater / Multi-Upload)</div>
-                            <div class="card__desc">Upload multiple images. The first image will be the primary display image.</div>
+                            <div class="card__desc">Upload multiple images. The first image will be the primary display image. <span style="color: #4ecdc4; font-weight: 600;">(Recommended for Best Selling / Catalog: 278 &times; 278 px)</span></div>
                         </div>
                     </div>
 
@@ -77,7 +77,7 @@
                          id="dropzone">
                         <div style="font-size: 40px; margin-bottom: 8px;">📁</div>
                         <h4 style="font-size: 15px; color: #fff; margin-bottom: 4px;">Click to Browse or Drag Multiple Product Images Here</h4>
-                        <p style="color: var(--text-muted); font-size: 12px;">Supports JPG, PNG, WEBP (Max 25MB each). Select multiple files at once.</p>
+                        <p style="color: var(--text-muted); font-size: 12px;">Supports JPG, PNG, WEBP (Max 25MB each). Select multiple files at once. Recommended size: <strong style="color: #4ecdc4;">278 &times; 278 px</strong>.</p>
                         <input type="file" name="images[]" id="multiImageInput" multiple accept="image/*" style="display: none;" onchange="handleFileSelect(this)">
                     </div>
 
@@ -143,6 +143,11 @@
                         <label style="display: flex; align-items: center; gap: 8px; color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 600;">
                             <input type="checkbox" name="is_featured" value="1" {{ old('is_featured') ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: var(--accent);">
                             ⭐ Featured Product
+                        </label>
+
+                        <label style="display: flex; align-items: center; gap: 8px; color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 600;">
+                            <input type="checkbox" name="is_best_selling" value="1" {{ old('is_best_selling') ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: #ff6b6b;">
+                            🔥 Best Selling Product
                         </label>
 
                         <label style="display: flex; align-items: center; gap: 8px; color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 600;">

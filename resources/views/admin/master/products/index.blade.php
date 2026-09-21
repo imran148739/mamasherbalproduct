@@ -102,6 +102,11 @@
                                             ★ Featured
                                         </span>
                                     @endif
+                                    @if($prod->is_best_selling)
+                                        <span class="badge" style="font-size: 10px; padding: 2px 7px; background: rgba(255,107,107,0.15); color: #ff6b6b; border: 1px solid rgba(255,107,107,0.3);">
+                                            🔥 Best Seller
+                                        </span>
+                                    @endif
                                 </div>
                                 <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">
                                     SKU: <code style="color: var(--text-secondary);">{{ $prod->sku ?? 'N/A' }}</code> &bull;

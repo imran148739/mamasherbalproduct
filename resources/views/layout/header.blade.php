@@ -237,18 +237,15 @@
                                 </ul>
                             </li>
                             <li class="header__menu--items">
-                                <a class="header__menu--link" href="index.html">Best Selling
-                                    <path d="M16.59,8.59,12,13.17,7.41,8.59,6,10l6,6,6-6Z"
-                                        transform="translate(-6 -8.59)" fill="currentColor" opacity="0.7" />
-                                </a>
+                                <a class="header__menu--link {{ request()->routeIs('best-selling*') ? 'active' : '' }}" href="{{ route('best-selling') }}">Best Selling</a>
                             </li>
                             <li class="header__menu--items">
-                                <a class="header__menu--link" href="about.html">
+                                <a class="header__menu--link {{ request()->routeIs('about*') ? 'active' : '' }}" href="{{ route('about') }}">
                                     About Us
                                 </a>
                             </li>
                             <li class="header__menu--items">
-                                <a class="header__menu--link" href="contact.html">Contact </a>
+                                <a class="header__menu--link {{ request()->routeIs('contact*') ? 'active' : '' }}" href="{{ route('contact') }}">Contact </a>
                             </li>
                         </ul>
                     </nav>
@@ -337,6 +334,9 @@
                         </ul>
                     </li>
                     <li class="offcanvas__menu_li">
+                        <a class="offcanvas__menu_item {{ request()->routeIs('best-selling*') ? 'active' : '' }}" href="{{ route('best-selling') }}">Best Selling</a>
+                    </li>
+                    <li class="offcanvas__menu_li">
                         <a class="offcanvas__menu_item" href="shop.html">Shop</a>
                         <ul class="offcanvas__sub_menu">
                             <li class="offcanvas__sub_menu_li">
@@ -417,9 +417,9 @@
                     <li class="offcanvas__menu_li">
                         <a class="offcanvas__menu_item" href="#">Pages</a>
                         <ul class="offcanvas__sub_menu">
-                            <li class="offcanvas__sub_menu_li"><a href="about.html"
+                            <li class="offcanvas__sub_menu_li"><a href="{{ route('about') }}"
                                     class="offcanvas__sub_menu_item">About Us</a></li>
-                            <li class="offcanvas__sub_menu_li"><a href="contact.html"
+                            <li class="offcanvas__sub_menu_li"><a href="{{ route('contact') }}"
                                     class="offcanvas__sub_menu_item">Contact Us</a></li>
                             <li class="offcanvas__sub_menu_li"><a href="cart.html"
                                     class="offcanvas__sub_menu_item">Cart Page</a></li>
@@ -433,8 +433,8 @@
                                     class="offcanvas__sub_menu_item">Error Page</a></li>
                         </ul>
                     </li>
-                    <li class="offcanvas__menu_li"><a class="offcanvas__menu_item" href="about.html">About</a></li>
-                    <li class="offcanvas__menu_li"><a class="offcanvas__menu_item" href="contact.html">Contact</a>
+                    <li class="offcanvas__menu_li"><a class="offcanvas__menu_item {{ request()->routeIs('about*') ? 'active' : '' }}" href="{{ route('about') }}">About</a></li>
+                    <li class="offcanvas__menu_li"><a class="offcanvas__menu_item {{ request()->routeIs('contact*') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a>
                     </li>
                 </ul>
                 <div class="offcanvas__account--items">
@@ -656,33 +656,700 @@
     </div>
     <!-- End offCanvas minicart -->
 
-    <!-- Start serch box area -->
-    <div class="predictive__search--box ">
+    <!-- Start search box area -->
+    <div class="predictive__search--box" id="predictiveSearchModal">
         <div class="predictive__search--box__inner">
-            <h2 class="predictive__search--title">Search Products</h2>
-            <form class="predictive__search--form" action="#">
-                <label>
-                    <input class="predictive__search--input" placeholder="Search Here" type="text">
-                </label>
-                <button class="predictive__search--button" aria-label="search button"><svg
-                        class="product__items--action__btn--svg" xmlns="http://www.w3.org/2000/svg" width="30.51"
-                        height="25.443" viewBox="0 0 512 512">
-                        <path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none"
-                            stroke="currentColor" stroke-miterlimit="10" stroke-width="32" />
-                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10"
-                            stroke-width="32" d="M338.29 338.29L448 448" />
-                    </svg> </button>
+            <!-- Search Form Bar -->
+            <form class="predictive__search--form" action="{{ route('shop') }}" method="GET" id="headerSearchForm">
+                <div class="predictive__search--bar__wrap">
+                    <input class="predictive__search--input" id="headerSearchInput" name="search"
+                        placeholder="I'm shopping for ..." type="text"
+                        autocomplete="off" value="{{ request('search') }}">
+                    <button type="button" class="predictive__search--clear__btn" id="headerSearchClearInput" aria-label="clear search" style="display: none;">
+                        &times;
+                    </button>
+                    <button class="predictive__search--button" type="submit" aria-label="search button">
+                        <span>SEARCH</span>
+                        <svg class="predictive__search--btn__svg" xmlns="http://www.w3.org/2000/svg" width="18"
+                            height="18" viewBox="0 0 512 512">
+                            <path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none"
+                                stroke="currentColor" stroke-miterlimit="10" stroke-width="36" />
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10"
+                                stroke-width="36" d="M338.29 338.29L448 448" />
+                        </svg>
+                    </button>
+                </div>
             </form>
+
+            <!-- Search Modal Content Area -->
+            <div class="predictive__search--content" id="predictiveSearchContent">
+
+                <!-- 1. Initial State: Trending Searches & Popular Products -->
+                <div class="predictive__search--initial" id="predictiveSearchInitial">
+                    <!-- Trending Search Section -->
+                    <div class="predictive__section--block">
+                        <h3 class="predictive__section--title">Trending Search</h3>
+                        <div class="predictive__trending--tags" id="predictiveTrendingTags">
+                            <button type="button" class="predictive__trending--pill" data-term="Health mix">Health mix</button>
+                            <button type="button" class="predictive__trending--pill" data-term="Tea Powder">Tea Powder</button>
+                            <button type="button" class="predictive__trending--pill" data-term="Spices">Spices</button>
+                            <button type="button" class="predictive__trending--pill" data-term="Cold Pressed Oil">Cold Pressed Oil</button>
+                            <button type="button" class="predictive__trending--pill" data-term="Herbal">Herbal</button>
+                            <button type="button" class="predictive__trending--pill" data-term="Seeds">Seeds</button>
+                        </div>
+                    </div>
+
+                    <!-- Popular Products Section -->
+                    <div class="predictive__section--block mt-24">
+                        <h3 class="predictive__section--title">Popular Products</h3>
+                        <div class="predictive__products--grid" id="predictivePopularProductsGrid">
+                            <div class="predictive__loading--state">
+                                <span class="predictive__spinner"></span>
+                                <span>Loading popular products...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Searched State: Visual Product Cards Matching Query -->
+                <div class="predictive__search--results" id="predictiveSearchResults" style="display: none;">
+                    <div class="predictive__section--block">
+                        <div class="d-flex align-items-center justify-content-between mb-15">
+                            <h3 class="predictive__section--title mb-0" id="predictiveResultsHeading">Products</h3>
+                            <a href="#" class="predictive__viewall--link" id="predictiveResultsViewAll" style="display: none;">
+                                View all results in shop &rarr;
+                            </a>
+                        </div>
+                        <div class="predictive__products--grid" id="predictiveSearchProductsGrid">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-        <button class="predictive__search--close__btn" aria-label="search close" data-offcanvas>
-            <svg class="predictive__search--close__icon" xmlns="http://www.w3.org/2000/svg" width="40.51"
-                height="30.443" viewBox="0 0 512 512">
+
+        <button class="predictive__search--close__btn" id="headerSearchCloseBtn" aria-label="search close" data-offcanvas>
+            <svg class="predictive__search--close__icon" xmlns="http://www.w3.org/2000/svg" width="32"
+                height="32" viewBox="0 0 512 512">
                 <path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                     stroke-width="32" d="M368 368L144 144M368 144L144 368" />
             </svg>
         </button>
     </div>
-    <!-- End serch box area -->
+    <!-- End search box area -->
+
+    <style>
+        .predictive__search--box {
+            background: #ffffff !important;
+            max-height: 88vh;
+            overflow-y: auto;
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 99999 !important;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(-100%);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+        }
+        .predictive__search--box.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .predictive__search--box__inner {
+            max-width: 1260px;
+            margin: 0 auto;
+            padding: 24px 24px 45px !important;
+            text-align: left;
+            position: relative;
+        }
+
+        /* Top Search Bar Styling matching reference screenshots */
+        .predictive__search--form {
+            max-width: 720px;
+            margin: 0 auto 28px;
+            position: relative;
+            width: 100%;
+        }
+        .predictive__search--bar__wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            border: 1.5px solid #2e7d32;
+            border-radius: 6px;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(46, 125, 50, 0.08);
+            overflow: hidden;
+        }
+        .predictive__search--input {
+            width: 100% !important;
+            height: 48px !important;
+            border: none !important;
+            padding: 0 140px 0 16px !important;
+            font-size: 15px !important;
+            font-weight: 400 !important;
+            color: #1e293b !important;
+            outline: none !important;
+            background: transparent !important;
+        }
+        .predictive__search--input::placeholder {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        .predictive__search--clear__btn {
+            position: absolute;
+            right: 115px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 20px;
+            line-height: 1;
+            color: #64748b;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 50%;
+            transition: color 0.15s, background 0.15s;
+            z-index: 2;
+        }
+        .predictive__search--clear__btn:hover {
+            color: #0f172a;
+            background: #f1f5f9;
+        }
+        .predictive__search--button {
+            position: absolute !important;
+            right: 0 !important;
+            top: 0 !important;
+            bottom: 0 !important;
+            height: 100% !important;
+            background: #2e7d32 !important;
+            color: #ffffff !important;
+            border: none !important;
+            padding: 0 22px !important;
+            font-size: 13px !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.8px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            border-radius: 0 4px 4px 0 !important;
+            transition: background 0.2s ease !important;
+            z-index: 2;
+        }
+        .predictive__search--button:hover {
+            background: #1b5e20 !important;
+        }
+        .predictive__search--btn__svg {
+            stroke: currentColor;
+            fill: none;
+        }
+
+        /* Close Button on Top Right */
+        .predictive__search--close__btn {
+            position: absolute !important;
+            top: 18px !important;
+            right: 25px !important;
+            background: transparent !important;
+            border: none !important;
+            color: #475569 !important;
+            cursor: pointer !important;
+            padding: 6px !important;
+            border-radius: 50% !important;
+            transition: all 0.2s ease !important;
+            z-index: 10 !important;
+        }
+        .predictive__search--close__btn:hover {
+            color: #0f172a !important;
+            background: #f1f5f9 !important;
+            transform: rotate(90deg) !important;
+        }
+
+        /* Section Titles matching reference images */
+        .predictive__section--title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e7e34;
+            margin: 0 0 12px 0;
+            letter-spacing: -0.2px;
+        }
+        .mt-24 {
+            margin-top: 24px;
+        }
+        .mb-15 {
+            margin-bottom: 15px;
+        }
+        .predictive__viewall--link {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2e7d32;
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        .predictive__viewall--link:hover {
+            color: #1b5e20;
+            text-decoration: underline;
+        }
+
+        /* Trending Search Pills */
+        .predictive__trending--tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .predictive__trending--pill {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            color: #475569;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+            line-height: 1.4;
+        }
+        .predictive__trending--pill:hover {
+            border-color: #2e7d32;
+            color: #2e7d32;
+            background: #f0fdf4;
+            transform: translateY(-1px);
+        }
+
+        /* Responsive Product Cards Grid matching Screenshot 1 and 2 */
+        .predictive__products--grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 18px;
+        }
+        @media (max-width: 1200px) {
+            .predictive__products--grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 14px;
+            }
+        }
+        @media (max-width: 900px) {
+            .predictive__products--grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+            }
+        }
+        @media (max-width: 600px) {
+            .predictive__products--grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+        }
+
+        /* Product Card */
+        .predictive__card {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            border-radius: 8px;
+            overflow: hidden;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            text-decoration: none !important;
+            transition: all 0.25s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        .predictive__card:hover {
+            border-color: #86efac;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            transform: translateY(-3px);
+        }
+        .predictive__card--img__box {
+            width: 100%;
+            height: 165px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .predictive__card--img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        .predictive__card:hover .predictive__card--img {
+            transform: scale(1.05);
+        }
+        .predictive__card--badge {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 2px 7px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .predictive__card--title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e293b;
+            line-height: 1.35;
+            margin: 0 0 6px 0;
+            min-height: 38px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .predictive__card--rating {
+            color: #f59e0b;
+            font-size: 13px;
+            margin-bottom: 6px;
+            letter-spacing: 2px;
+            line-height: 1;
+        }
+        .predictive__card--price {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: auto;
+            font-size: 13px;
+        }
+        .predictive__card--oldprice {
+            color: #94a3b8;
+            font-size: 12px;
+            text-decoration: line-through;
+            font-weight: 400;
+        }
+        .predictive__card--currprice {
+            color: #166534;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        /* Loading & Empty States */
+        .predictive__loading--state {
+            grid-column: 1 / -1;
+            padding: 40px 20px;
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .predictive__spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e2e8f0;
+            border-top-color: #2e7d32;
+            border-radius: 50%;
+            animation: predictiveSpin 0.6s linear infinite;
+            display: inline-block;
+        }
+        @keyframes predictiveSpin {
+            to { transform: rotate(360deg); }
+        }
+        .predictive__search--empty {
+            grid-column: 1 / -1;
+            padding: 35px 20px;
+            text-align: center;
+            background: #fafafa;
+            border-radius: 8px;
+            border: 1px dashed #cbd5e1;
+        }
+        .predictive__highlight {
+            background-color: #fef08a;
+            color: #854d0e;
+            font-weight: 700;
+            padding: 0 1px;
+            border-radius: 2px;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('headerSearchInput');
+            const clearBtn = document.getElementById('headerSearchClearInput');
+            const searchForm = document.getElementById('headerSearchForm');
+            const searchBox = document.getElementById('predictiveSearchModal');
+            const initialContainer = document.getElementById('predictiveSearchInitial');
+            const resultsContainer = document.getElementById('predictiveSearchResults');
+            const trendingTags = document.getElementById('predictiveTrendingTags');
+            const popularGrid = document.getElementById('predictivePopularProductsGrid');
+            const searchProductsGrid = document.getElementById('predictiveSearchProductsGrid');
+            const resultsHeading = document.getElementById('predictiveResultsHeading');
+            const resultsViewAll = document.getElementById('predictiveResultsViewAll');
+            const closeBtn = document.getElementById('headerSearchCloseBtn');
+            const suggestUrl = "{{ route('search.suggest') }}";
+
+            let debounceTimer = null;
+            let currentRequest = null;
+            let initialDataLoaded = false;
+
+            // Helper to escape HTML characters
+            function escapeHtml(str) {
+                if (!str) return '';
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            }
+
+            // Helper to highlight matching terms
+            function highlightMatch(text, query) {
+                if (!query || !text) return escapeHtml(text);
+                const safeText = escapeHtml(text);
+                const safeQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp('(' + safeQuery + ')', 'gi');
+                return safeText.replace(regex, '<mark class="predictive__highlight">$1</mark>');
+            }
+
+            // Render single product card matching the reference screenshots
+            function renderProductCard(product, query) {
+                const titleHtml = query ? highlightMatch(product.name, query) : escapeHtml(product.name);
+                const oldPriceHtml = product.old_price ? `<span class="predictive__card--oldprice">${escapeHtml(product.old_price)}</span>` : '';
+                const ratingStars = '★★★★★';
+
+                return `
+                    <a href="${product.url}" class="predictive__card">
+                        <div class="predictive__card--img__box">
+                            <img src="${product.image}" alt="${escapeHtml(product.name)}" class="predictive__card--img" onerror="this.src='{{ asset('img/product/product1.png') }}'">
+                            ${product.badge ? `<span class="predictive__card--badge">${escapeHtml(product.badge)}</span>` : ''}
+                        </div>
+                        <div class="predictive__card--body">
+                            <h4 class="predictive__card--title">${titleHtml}</h4>
+                            <div class="predictive__card--rating" title="Rated 5.0 out of 5">
+                                ${ratingStars}
+                            </div>
+                            <div class="predictive__card--price">
+                                ${oldPriceHtml}
+                                <span class="predictive__card--currprice">${escapeHtml(product.price)}</span>
+                            </div>
+                        </div>
+                    </a>
+                `;
+            }
+
+            // Load Initial Data (Trending Searches & Popular Products)
+            function loadInitialData() {
+                if (initialDataLoaded) return;
+
+                fetch(suggestUrl, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                    initialDataLoaded = true;
+
+                    // Render Trending Pills
+                    if (data.trending && data.trending.length > 0 && trendingTags) {
+                        let pillsHtml = '';
+                        data.trending.forEach(function (term) {
+                            pillsHtml += `<button type="button" class="predictive__trending--pill" data-term="${escapeHtml(term)}">${escapeHtml(term)}</button>`;
+                        });
+                        trendingTags.innerHTML = pillsHtml;
+                        bindTrendingClicks();
+                    }
+
+                    // Render Popular Products Grid
+                    if (data.popular && data.popular.length > 0 && popularGrid) {
+                        let cardsHtml = '';
+                        data.popular.forEach(function (product) {
+                            cardsHtml += renderProductCard(product, '');
+                        });
+                        popularGrid.innerHTML = cardsHtml;
+                    }
+                })
+                .catch(function (err) {
+                    if (popularGrid) {
+                        popularGrid.innerHTML = '<div class="text-muted small py-3">Popular products ready in catalog.</div>';
+                    }
+                });
+            }
+
+            // Bind click events on trending search pills
+            function bindTrendingClicks() {
+                document.querySelectorAll('.predictive__trending--pill').forEach(function (pill) {
+                    pill.addEventListener('click', function () {
+                        const term = this.getAttribute('data-term');
+                        if (term && searchInput) {
+                            searchInput.value = term;
+                            toggleClearBtn();
+                            doSearch(term);
+                        }
+                    });
+                });
+            }
+
+            // Toggle visibility of clear button
+            function toggleClearBtn() {
+                if (!clearBtn || !searchInput) return;
+                if (searchInput.value.trim().length > 0) {
+                    clearBtn.style.display = 'block';
+                } else {
+                    clearBtn.style.display = 'none';
+                }
+            }
+
+            // Reset search input and restore Trending & Popular view
+            function resetToInitialView() {
+                if (searchInput) {
+                    searchInput.value = '';
+                }
+                toggleClearBtn();
+                if (resultsContainer) resultsContainer.style.display = 'none';
+                if (initialContainer) initialContainer.style.display = 'block';
+                if (searchInput) searchInput.focus();
+            }
+
+            // Perform live AJAX search for query
+            function doSearch(query) {
+                query = query.trim();
+
+                if (query.length < 1) {
+                    resetToInitialView();
+                    return;
+                }
+
+                // Switch view to searched results
+                if (initialContainer) initialContainer.style.display = 'none';
+                if (resultsContainer) resultsContainer.style.display = 'block';
+
+                if (resultsHeading) {
+                    resultsHeading.textContent = 'Products';
+                }
+                if (resultsViewAll) {
+                    resultsViewAll.style.display = 'none';
+                }
+
+                if (searchProductsGrid) {
+                    searchProductsGrid.innerHTML = `
+                        <div class="predictive__loading--state">
+                            <span class="predictive__spinner"></span>
+                            <span>Searching products for "<strong>${escapeHtml(query)}</strong>"...</span>
+                        </div>
+                    `;
+                }
+
+                if (currentRequest) {
+                    currentRequest.abort();
+                }
+
+                const controller = new AbortController();
+                currentRequest = controller;
+
+                fetch(suggestUrl + '?q=' + encodeURIComponent(query), {
+                    signal: controller.signal,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                    if (!searchProductsGrid) return;
+
+                    if (data.results.length === 0) {
+                        searchProductsGrid.innerHTML = `
+                            <div class="predictive__search--empty">
+                                <div style="font-size: 28px; margin-bottom: 8px;">🌿</div>
+                                <h4 style="font-weight: 700; color: #1e293b; font-size: 16px; margin-bottom: 6px;">No Products Found</h4>
+                                <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">
+                                    We couldn't find any products matching "<strong>${escapeHtml(query)}</strong>".
+                                </p>
+                                <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                                    <button type="button" class="predictive__trending--pill" onclick="document.getElementById('headerSearchInput').value='Spices'; document.getElementById('headerSearchInput').dispatchEvent(new Event('input'));">Try "Spices"</button>
+                                    <button type="button" class="predictive__trending--pill" onclick="document.getElementById('headerSearchInput').value='Oil'; document.getElementById('headerSearchInput').dispatchEvent(new Event('input'));">Try "Oil"</button>
+                                    <button type="button" class="predictive__trending--pill" onclick="document.getElementById('headerSearchInput').value='Herbal'; document.getElementById('headerSearchInput').dispatchEvent(new Event('input'));">Try "Herbal"</button>
+                                </div>
+                            </div>
+                        `;
+                        if (resultsViewAll) resultsViewAll.style.display = 'none';
+                    } else {
+                        let html = '';
+                        data.results.forEach(function (product) {
+                            html += renderProductCard(product, query);
+                        });
+                        searchProductsGrid.innerHTML = html;
+
+                        if (resultsViewAll && data.view_all_url) {
+                            resultsViewAll.href = data.view_all_url;
+                            resultsViewAll.innerHTML = `View all <strong>${data.total}</strong> products in shop &rarr;`;
+                            resultsViewAll.style.display = 'inline-block';
+                        }
+                    }
+                })
+                .catch(function (err) {
+                    if (err.name !== 'AbortError' && searchProductsGrid) {
+                        searchProductsGrid.innerHTML = `
+                            <div class="predictive__search--empty">
+                                <p style="color: #dc2626; font-size: 14px;">Error searching products. Press Enter to view results in shop.</p>
+                            </div>
+                        `;
+                    }
+                });
+            }
+
+            // Input listener with debounce
+            if (searchInput) {
+                searchInput.addEventListener('input', function () {
+                    toggleClearBtn();
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(function () {
+                        doSearch(searchInput.value);
+                    }, 200);
+                });
+
+                // Keyboard handling
+                searchInput.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape') {
+                        closeBtn?.click();
+                    }
+                });
+            }
+
+            // Clear button click listener
+            if (clearBtn) {
+                clearBtn.addEventListener('click', function () {
+                    resetToInitialView();
+                });
+            }
+
+            // When search modal is opened, load initial popular products and auto-focus
+            document.querySelectorAll('.search__open--btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    loadInitialData();
+                    setTimeout(function () {
+                        if (searchInput) {
+                            searchInput.focus();
+                            searchInput.select();
+                            toggleClearBtn();
+                            if (searchInput.value.trim().length > 0) {
+                                doSearch(searchInput.value);
+                            } else {
+                                resetToInitialView();
+                            }
+                        }
+                    }, 120);
+                });
+            });
+
+            // Initial binding for trending pills in HTML
+            bindTrendingClicks();
+        });
+    </script>
 
 </header>
 <!-- End header area -->

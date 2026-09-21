@@ -47,6 +47,7 @@ class ProductController extends Controller
             'badge'             => 'nullable|string|max:50',
             'rating'            => 'nullable|numeric|min:1|max:5',
             'is_featured'       => 'nullable|boolean',
+            'is_best_selling'   => 'nullable|boolean',
             'is_active'         => 'nullable|boolean',
             'sort_order'        => 'nullable|integer',
             'images.*'          => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:25600',
@@ -65,6 +66,7 @@ class ProductController extends Controller
             'badge'             => $request->badge,
             'rating'            => $request->rating ?? 5.0,
             'is_featured'       => $request->has('is_featured'),
+            'is_best_selling'   => $request->has('is_best_selling'),
             'is_active'         => $request->has('is_active'),
             'sort_order'        => $request->sort_order ?? 0,
         ];
@@ -123,6 +125,7 @@ class ProductController extends Controller
             'badge'             => 'nullable|string|max:50',
             'rating'            => 'nullable|numeric|min:1|max:5',
             'is_featured'       => 'nullable|boolean',
+            'is_best_selling'   => 'nullable|boolean',
             'is_active'         => 'nullable|boolean',
             'sort_order'        => 'nullable|integer',
             'images.*'          => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:25600',
@@ -140,6 +143,7 @@ class ProductController extends Controller
             'badge'             => $request->badge,
             'rating'            => $request->rating ?? 5.0,
             'is_featured'       => $request->has('is_featured'),
+            'is_best_selling'   => $request->has('is_best_selling'),
             'is_active'         => $request->has('is_active'),
             'sort_order'        => $request->sort_order ?? 0,
         ];

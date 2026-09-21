@@ -110,11 +110,17 @@
 
                     {{-- Upload Additional Images Dropzone --}}
                     <div style="border-top: 1px solid var(--border); padding-top: 16px;">
-                        <label class="form-label" style="font-weight: 700; margin-bottom: 8px;">➕ Upload Additional Images to Gallery</label>
+                        <label class="form-label" style="font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+                            <span>➕ Upload Additional Images to Gallery</span>
+                            <span class="badge" style="background: rgba(78, 205, 196, 0.15); color: #4ecdc4; border: 1px solid rgba(78, 205, 196, 0.35); font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600;">
+                                Recommended: 278 &times; 278 px
+                            </span>
+                        </label>
                         <div style="border: 2px dashed rgba(108,99,255,0.35); border-radius: 12px; padding: 20px; text-align: center; background: rgba(108,99,255,0.03); cursor: pointer;"
                              onclick="document.getElementById('editMultiImageInput').click()">
                             <div style="font-size: 30px; margin-bottom: 4px;">📸</div>
                             <span style="font-size: 13px; color: #fff; font-weight: 600;">Click to Add More Images</span>
+                            <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Recommended size for Best Selling / Catalog: <strong style="color: #4ecdc4;">278 &times; 278 px</strong></div>
                             <input type="file" name="images[]" id="editMultiImageInput" multiple accept="image/*" style="display: none;" onchange="accumulateEditFiles(this)">
                         </div>
 
@@ -179,6 +185,11 @@
                         <label style="display: flex; align-items: center; gap: 8px; color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 600;">
                             <input type="checkbox" name="is_featured" value="1" {{ old('is_featured', $product->is_featured) ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: var(--accent);">
                             ⭐ Featured Product
+                        </label>
+
+                        <label style="display: flex; align-items: center; gap: 8px; color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 600;">
+                            <input type="checkbox" name="is_best_selling" value="1" {{ old('is_best_selling', $product->is_best_selling) ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: #ff6b6b;">
+                            🔥 Best Selling Product
                         </label>
 
                         <label style="display: flex; align-items: center; gap: 8px; color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 600;">

@@ -651,7 +651,7 @@
             </a>
 
             @php
-                $isMasterActive = request()->is('admin/master*');
+                $isMasterActive = request()->is('admin/master*') || request()->is('admin/best-selling*');
                 $isHomeActive = request()->is('admin/sections*') || (request()->is('admin/home-content*') && !request()->is('admin/home-content/header*'));
             @endphp
 
@@ -680,8 +680,22 @@
                         <span class="sidebar__sublink-icon">🏷️</span>
                         <span>Products</span>
                     </a>
+
+                    <a href="{{ route('admin.best-selling.index') }}"
+                       class="sidebar__sublink {{ request()->routeIs('admin.best-selling.*') ? 'active' : '' }}">
+                        <span class="sidebar__sublink-icon">🔥</span>
+                        <span>Best Selling Items</span>
+                    </a>
                 </div>
             </div>
+
+            {{-- Standalone Best Selling Menu --}}
+            <div class="sidebar__label" style="margin-top:14px;">Best Selling</div>
+            <a href="{{ route('admin.best-selling.index') }}"
+               class="sidebar__link {{ request()->routeIs('admin.best-selling.*') ? 'active' : '' }}">
+                <span class="sidebar__link-icon">🔥</span>
+                Best Selling Items
+            </a>
 
             <div class="sidebar__label" style="margin-top:14px;">Storefront Pages</div>
 
@@ -740,6 +754,18 @@
                     </a>
                 </div>
             </div>
+
+            <a href="{{ route('admin.about.edit') }}"
+               class="sidebar__link {{ request()->routeIs('admin.about.*') ? 'active' : '' }}" style="margin-top: 6px;">
+                <span class="sidebar__link-icon">📖</span>
+                About Us
+            </a>
+
+            <a href="{{ route('admin.contact.edit') }}"
+               class="sidebar__link {{ request()->routeIs('admin.contact.*') ? 'active' : '' }}" style="margin-top: 6px;">
+                <span class="sidebar__link-icon">📞</span>
+                Contact Us
+            </a>
 
             <div class="sidebar__label" style="margin-top:14px;">Quick Links</div>
             <a href="/" target="_blank" class="sidebar__link">

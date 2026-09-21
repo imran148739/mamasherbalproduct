@@ -15,17 +15,17 @@
                 <ul class="widget__categories--menu">
                     <li class="widget__categories--menu__list">
                         <a class="widget__categories--menu__label d-flex align-items-center justify-content-between {{ !$currentCategory ? 'active' : '' }}"
-                            href="{{ route('shop') }}"
+                            href="{{ route('best-selling') }}"
                             style="text-decoration: none; padding: 10px 0; {{ !$currentCategory ? 'color: #388e3c; font-weight: 700;' : 'color: #333;' }}">
-                            <span class="widget__categories--menu__text">All Products</span>
-                            <span class="badge bg-light text-dark rounded-pill border">{{ \App\Models\Product::active()->count() }}</span>
+                            <span class="widget__categories--menu__text">All Best Sellers</span>
+                            <span class="badge bg-light text-dark rounded-pill border">{{ \App\Models\Product::active()->bestSelling()->count() }}</span>
                         </a>
                     </li>
                     @foreach($categories as $cat)
                         @php $isActive = $currentCategory && $currentCategory->id === $cat->id; @endphp
                         <li class="widget__categories--menu__list">
                             <a class="widget__categories--menu__label d-flex align-items-center justify-content-between {{ $isActive ? 'active' : '' }}"
-                                href="{{ route('shop', ['category' => $cat->slug]) }}"
+                                href="{{ route('best-selling', ['category' => $cat->slug]) }}"
                                 style="text-decoration: none; padding: 10px 0; {{ $isActive ? 'color: #388e3c; font-weight: 700;' : 'color: #333;' }}">
                                 <span class="widget__categories--menu__text">{{ $cat->name }}</span>
                                 <span class="badge bg-light text-dark rounded-pill border">{{ $cat->products_count }}</span>
@@ -38,7 +38,7 @@
             <!-- Start Price Filter Widget -->
             <div class="single__widget price__filter widget__bg">
                 <h2 class="widget__title h3">Filter By Price</h2>
-                <form class="price__filter--form" action="{{ route('shop') }}" method="GET">
+                <form class="price__filter--form" action="{{ route('best-selling') }}" method="GET">
                     @if(request('category'))
                         <input type="hidden" name="category" value="{{ request('category') }}">
                     @endif
@@ -92,7 +92,7 @@
             @endphp
             @if($hasActiveFilters)
                 <div class="single__widget widget__bg text-center">
-                    <a href="{{ route('shop') }}" class="btn btn-sm btn-outline-secondary w-100" style="padding: 8px 12px; font-size: 13px;">
+                    <a href="{{ route('best-selling') }}" class="btn btn-sm btn-outline-secondary w-100" style="padding: 8px 12px; font-size: 13px;">
                         ✕ Clear All Filters
                     </a>
                 </div>
@@ -111,7 +111,7 @@
                     <div class="col">
                         <div class="breadcrumb__content text-center">
                             <h1 class="breadcrumb__content--title text-white mb-25">
-                                {{ $currentCategory ? $currentCategory->name : 'Shop' }}
+                                {{ $currentCategory ? $currentCategory->name . ' - Best Selling' : 'Best Selling Products' }}
                             </h1>
                             <ul class="breadcrumb__content--menu d-flex justify-content-center">
                                 <li class="breadcrumb__content--menu__items">
@@ -119,9 +119,9 @@
                                 </li>
                                 <li class="breadcrumb__content--menu__items">
                                     @if($currentCategory)
-                                        <a class="text-white" href="{{ route('shop') }}">Shop</a>
+                                        <a class="text-white" href="{{ route('best-selling') }}">Best Selling</a>
                                     @else
-                                        <span class="text-white">Shop</span>
+                                        <span class="text-white">Best Selling</span>
                                     @endif
                                 </li>
                                 @if($currentCategory)
@@ -161,11 +161,11 @@
                             <div class="select shop__header--select">
                                 <select class="product__view--select" onchange="window.location.href = this.value;">
                                     <option value="{{ request()->fullUrlWithQuery(['sort' => 'latest', 'page' => null]) }}" {{ request('sort', 'latest') == 'latest' ? 'selected' : '' }}>Sort by latest</option>
-                                    <option value="{{ request()->fullUrlWithQuery(['sort' => 'price_low_high', 'page' => null]) }}" {{ request('sort') == 'price_low_high' ? 'selected' : '' }}>Price: Low to High</option>
-                                    <option value="{{ request()->fullUrlWithQuery(['sort' => 'price_high_low', 'page' => null]) }}" {{ request('sort') == 'price_high_low' ? 'selected' : '' }}>Price: High to Low</option>
-                                    <option value="{{ request()->fullUrlWithQuery(['sort' => 'name_asc', 'page' => null]) }}" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Name: A to Z</option>
-                                    <option value="{{ request()->fullUrlWithQuery(['sort' => 'name_desc', 'page' => null]) }}" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>Name: Z to A</option>
-                                    <option value="{{ request()->fullUrlWithQuery(['sort' => 'rating', 'page' => null]) }}" {{ request('sort') == 'rating' ? 'selected' : '' }}>Sort by rating</option>
+                                    <option value="{{ request()->fullUrlWithQuery(['sort' => 'price_low_high', 'page' => null]) }}" {{ request('sort', 'price_low_high') == 'price_low_high' ? 'selected' : '' }}>Price: Low to High</option>
+                                    <option value="{{ request()->fullUrlWithQuery(['sort' => 'price_high_low', 'page' => null]) }}" {{ request('sort', 'price_high_low') == 'price_high_low' ? 'selected' : '' }}>Price: High to Low</option>
+                                    <option value="{{ request()->fullUrlWithQuery(['sort' => 'name_asc', 'page' => null]) }}" {{ request('sort', 'name_asc') == 'name_asc' ? 'selected' : '' }}>Name: A to Z</option>
+                                    <option value="{{ request()->fullUrlWithQuery(['sort' => 'name_desc', 'page' => null]) }}" {{ request('sort', 'name_desc') == 'name_desc' ? 'selected' : '' }}>Name: Z to A</option>
+                                    <option value="{{ request()->fullUrlWithQuery(['sort' => 'rating', 'page' => null]) }}" {{ request('sort', 'rating') == 'rating' ? 'selected' : '' }}>Sort by rating</option>
                                 </select>
                             </div>
                         </div>
@@ -222,7 +222,7 @@
                             </div>
                         </div>
                         <div class="product__view--mode__list product__view--search d-xl-block d-none ">
-                            <form class="product__view--search__form" action="{{ route('shop') }}" method="GET">
+                            <form class="product__view--search__form" action="{{ route('best-selling') }}" method="GET">
                                 @if(request('category'))
                                     <input type="hidden" name="category" value="{{ request('category') }}">
                                 @endif
@@ -231,7 +231,7 @@
                                 @endif
                                 <label>
                                     <input class="product__view--search__input border-0" name="search"
-                                        value="{{ request('search') }}" placeholder="Search products..." type="text">
+                                        value="{{ request('search') }}" placeholder="Search best sellers..." type="text">
                                 </label>
                                 <button class="product__view--search__btn" aria-label="search btn" type="submit">
                                     <svg class="product__items--action__btn--svg" xmlns="http://www.w3.org/2000/svg"
@@ -251,26 +251,8 @@
                         @if($currentCategory)
                             <span class="text-muted ms-1">in <strong>{{ $currentCategory->name }}</strong></span>
                         @endif
-                        @if(request('search'))
-                            <span class="text-muted ms-1">for "<strong>{{ request('search') }}</strong>"</span>
-                        @endif
                     </p>
                 </div>
-
-                @if(request('search'))
-                    <div class="search__results--banner mb-30 d-flex align-items-center justify-content-between flex-wrap gap-2" style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 12px 18px;">
-                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <span style="font-size: 16px;">🔍</span>
-                            <span style="color: #166534; font-size: 14px;">Search results for: <strong>"{{ request('search') }}"</strong></span>
-                            <span class="badge" style="background: #dcfce7; color: #15803d; font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 12px;">
-                                {{ $products->total() }} {{ Str::plural('product', $products->total()) }} found
-                            </span>
-                        </div>
-                        <a href="{{ request()->fullUrlWithoutQuery(['search', 'page']) }}" class="btn btn-sm" style="background: #ffffff; color: #dc2626; border: 1px solid #fca5a5; padding: 5px 12px; font-size: 12px; font-weight: 600; border-radius: 6px; text-decoration: none;">
-                            ✕ Clear Search
-                        </a>
-                    </div>
-                @endif
                 <div class="row">
                     <!-- Left Sidebar (Desktop) -->
                     <div class="col-xl-3 col-lg-4">
@@ -281,17 +263,17 @@
                                 <ul class="widget__categories--menu">
                                     <li class="widget__categories--menu__list">
                                         <a class="widget__categories--menu__label d-flex align-items-center justify-content-between {{ !$currentCategory ? 'active' : '' }}"
-                                            href="{{ route('shop') }}"
+                                            href="{{ route('best-selling') }}"
                                             style="text-decoration: none; padding: 10px 0; {{ !$currentCategory ? 'color: #388e3c; font-weight: 700;' : 'color: #333;' }}">
-                                            <span class="widget__categories--menu__text">All Products</span>
-                                            <span class="badge bg-light text-dark rounded-pill border">{{ \App\Models\Product::active()->count() }}</span>
+                                            <span class="widget__categories--menu__text">All Best Sellers</span>
+                                            <span class="badge bg-light text-dark rounded-pill border">{{ \App\Models\Product::active()->bestSelling()->count() }}</span>
                                         </a>
                                     </li>
                                     @foreach($categories as $cat)
                                         @php $isActive = $currentCategory && $currentCategory->id === $cat->id; @endphp
                                         <li class="widget__categories--menu__list">
                                             <a class="widget__categories--menu__label d-flex align-items-center justify-content-between {{ $isActive ? 'active' : '' }}"
-                                                href="{{ route('shop', ['category' => $cat->slug]) }}"
+                                                href="{{ route('best-selling', ['category' => $cat->slug]) }}"
                                                 style="text-decoration: none; padding: 10px 0; {{ $isActive ? 'color: #388e3c; font-weight: 700;' : 'color: #333;' }}">
                                                 <span class="widget__categories--menu__text">{{ $cat->name }}</span>
                                                 <span class="badge bg-light text-dark rounded-pill border">{{ $cat->products_count }}</span>
@@ -304,7 +286,7 @@
                             <!-- Start Price Filter Widget -->
                             <div class="single__widget price__filter widget__bg">
                                 <h2 class="widget__title h3">Filter By Price</h2>
-                                <form class="price__filter--form" action="{{ route('shop') }}" method="GET">
+                                <form class="price__filter--form" action="{{ route('best-selling') }}" method="GET">
                                     @if(request('category'))
                                         <input type="hidden" name="category" value="{{ request('category') }}">
                                     @endif
@@ -354,7 +336,7 @@
 
                             @if($hasActiveFilters)
                                 <div class="single__widget widget__bg text-center">
-                                    <a href="{{ route('shop') }}" class="btn btn-outline-secondary w-100" style="padding: 9px 12px; font-size: 14px; font-weight: 600;">
+                                    <a href="{{ route('best-selling') }}" class="btn btn-outline-secondary w-100" style="padding: 9px 12px; font-size: 14px; font-weight: 600;">
                                         ✕ Clear All Filters
                                     </a>
                                 </div>
@@ -386,6 +368,10 @@
                                                                 <div class="product__badge">
                                                                     <span class="product__badge--items {{ strtolower($product->badge) }}">{{ $product->badge }}</span>
                                                                 </div>
+                                                            @else
+                                                                <div class="product__badge">
+                                                                    <span class="product__badge--items hot">Best Seller</span>
+                                                                </div>
                                                             @endif
                                                             <ul class="product__items--action">
                                                                 <li class="product__items--action__list">
@@ -407,10 +393,9 @@
                                                                         <svg class="product__items--action__btn--svg"
                                                                             xmlns="http://www.w3.org/2000/svg"
                                                                             viewBox="0 0 512 512">
-                                                                            <path
-                                                                                d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z"
-                                                                                fill="none" stroke="currentColor"
-                                                                                stroke-miterlimit="10" stroke-width="32" />
+                                                                            <path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z"
+                                                                                fill="none" stroke="currentColor" stroke-miterlimit="10"
+                                                                                stroke-width="32" />
                                                                             <path fill="none" stroke="currentColor"
                                                                                 stroke-linecap="round"
                                                                                 stroke-miterlimit="10" stroke-width="32"
@@ -475,21 +460,19 @@
                                             @empty
                                                 <div class="col-12 text-center py-5">
                                                     <div style="padding: 50px 20px; background: #fff; border: 1px solid #eee; border-radius: 8px;">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" fill="#aaa" viewBox="0 0 16 16" style="margin-bottom: 15px;">
-                                                            <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" fill="#ff6b6b" viewBox="0 0 16 16" style="margin-bottom: 15px;">
+                                                            <path d="M8 16c3.314 0 6-2.686 6-6 0-3.314-2.686-6-6-6-3.314 0-6 2.686-6 6 0 3.314 2.686 6 6 6z"/>
                                                         </svg>
-                                                        <h4 style="font-weight: 700; color: #333; margin-bottom: 8px;">No Products Found</h4>
+                                                        <h4 style="font-weight: 700; color: #333; margin-bottom: 8px;">No Best Selling Products Found</h4>
                                                         <p style="color: #777; margin-bottom: 20px;">
-                                                            @if(request('search'))
-                                                                No products found matching "<strong>{{ request('search') }}</strong>". Try checking your spelling or searching with broader keywords like "oil", "soap", or "herbal".
-                                                            @elseif($currentCategory)
-                                                                There are currently no products in the <strong>{{ $currentCategory->name }}</strong> category matching your criteria.
+                                                            @if($currentCategory)
+                                                                There are currently no best selling products in the <strong>{{ $currentCategory->name }}</strong> category matching your criteria.
                                                             @else
-                                                                There are currently no products matching your criteria.
+                                                                There are currently no products featured as best sellers matching your criteria.
                                                             @endif
                                                         </p>
                                                         <a href="{{ route('shop') }}" class="btn" style="background-color: #388e3c; color: #fff; padding: 10px 28px; border-radius: 25px; font-weight: 600;">
-                                                            View All Products
+                                                            Explore All Products
                                                         </a>
                                                     </div>
                                                 </div>
@@ -518,6 +501,10 @@
                                                                 <div class="product__badge">
                                                                     <span class="product__badge--items {{ strtolower($product->badge) }}">{{ $product->badge }}</span>
                                                                 </div>
+                                                            @else
+                                                                <div class="product__badge">
+                                                                    <span class="product__badge--items hot">Best Seller</span>
+                                                                </div>
                                                             @endif
                                                             <ul class="product__items--action">
                                                                 <li class="product__items--action__list">
@@ -539,10 +526,9 @@
                                                                         <svg class="product__items--action__btn--svg"
                                                                             xmlns="http://www.w3.org/2000/svg"
                                                                             viewBox="0 0 512 512">
-                                                                            <path
-                                                                                d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z"
-                                                                                fill="none" stroke="currentColor"
-                                                                                stroke-miterlimit="10" stroke-width="32" />
+                                                                            <path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z"
+                                                                                fill="none" stroke="currentColor" stroke-miterlimit="10"
+                                                                                stroke-width="32" />
                                                                             <path fill="none" stroke="currentColor"
                                                                                 stroke-linecap="round"
                                                                                 stroke-miterlimit="10" stroke-width="32"
@@ -610,21 +596,19 @@
                                             @empty
                                                 <div class="col-12 text-center py-5">
                                                     <div style="padding: 50px 20px; background: #fff; border: 1px solid #eee; border-radius: 8px;">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" fill="#aaa" viewBox="0 0 16 16" style="margin-bottom: 15px;">
-                                                            <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" fill="#ff6b6b" viewBox="0 0 16 16" style="margin-bottom: 15px;">
+                                                            <path d="M8 16c3.314 0 6-2.686 6-6 0-3.314-2.686-6-6-6-3.314 0-6 2.686-6 6 0 3.314 2.686 6 6 6z"/>
                                                         </svg>
-                                                        <h4 style="font-weight: 700; color: #333; margin-bottom: 8px;">No Products Found</h4>
+                                                        <h4 style="font-weight: 700; color: #333; margin-bottom: 8px;">No Best Selling Products Found</h4>
                                                         <p style="color: #777; margin-bottom: 20px;">
-                                                            @if(request('search'))
-                                                                No products found matching "<strong>{{ request('search') }}</strong>". Try checking your spelling or searching with broader keywords like "oil", "soap", or "herbal".
-                                                            @elseif($currentCategory)
-                                                                There are currently no products in the <strong>{{ $currentCategory->name }}</strong> category matching your criteria.
+                                                            @if($currentCategory)
+                                                                There are currently no best selling products in the <strong>{{ $currentCategory->name }}</strong> category matching your criteria.
                                                             @else
-                                                                There are currently no products matching your criteria.
+                                                                There are currently no products featured as best sellers matching your criteria.
                                                             @endif
                                                         </p>
                                                         <a href="{{ route('shop') }}" class="btn" style="background-color: #388e3c; color: #fff; padding: 10px 28px; border-radius: 25px; font-weight: 600;">
-                                                            View All Products
+                                                            Explore All Products
                                                         </a>
                                                     </div>
                                                 </div>

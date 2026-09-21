@@ -31,22 +31,23 @@ class HomeContentController extends Controller
 
             'hero_slider' => [
                 'label' => 'Hero Slider',
+                'recommended_size' => '1521 × 515 px',
                 'fields' => [
-                    'slide_1_bg_image'   => ['label' => 'Slide 1 – Background Image', 'type' => 'image', 'default' => 'img/slider/home4-slider1.png'],
+                    'slide_1_bg_image'   => ['label' => 'Slide 1 – Background Image (1521 × 515 px)', 'type' => 'image', 'default' => 'img/slider/home4-slider1.png', 'recommended_size' => '1521 × 515 px'],
                     'slide_1_subtitle'   => ['label' => 'Slide 1 – Subtitle',          'type' => 'text',  'default' => 'As fresh as Fruit'],
                     'slide_1_title'      => ['label' => 'Slide 1 – Main Title',        'type' => 'text',  'default' => 'The Roots Are with fruits'],
                     'slide_1_desc'       => ['label' => 'Slide 1 – Description',       'type' => 'textarea', 'default' => 'The more you love your health, more you eat organic.'],
                     'slide_1_btn_text'   => ['label' => 'Slide 1 – Button Text',       'type' => 'text',  'default' => 'Shop Now'],
                     'slide_1_btn_url'    => ['label' => 'Slide 1 – Button URL',        'type' => 'url',   'default' => '#'],
 
-                    'slide_2_bg_image'   => ['label' => 'Slide 2 – Background Image', 'type' => 'image', 'default' => 'img/slider/home4-slider2.png'],
+                    'slide_2_bg_image'   => ['label' => 'Slide 2 – Background Image (1521 × 515 px)', 'type' => 'image', 'default' => 'img/slider/home4-slider2.png', 'recommended_size' => '1521 × 515 px'],
                     'slide_2_subtitle'   => ['label' => 'Slide 2 – Subtitle',          'type' => 'text',  'default' => 'As fresh as Fruit'],
                     'slide_2_title'      => ['label' => 'Slide 2 – Main Title',        'type' => 'text',  'default' => 'The Roots Are with fruits'],
                     'slide_2_desc'       => ['label' => 'Slide 2 – Description',       'type' => 'textarea', 'default' => 'The more you love your health, more you eat organic.'],
                     'slide_2_btn_text'   => ['label' => 'Slide 2 – Button Text',       'type' => 'text',  'default' => 'Shop Now'],
                     'slide_2_btn_url'    => ['label' => 'Slide 2 – Button URL',        'type' => 'url',   'default' => '#'],
 
-                    'slide_3_bg_image'   => ['label' => 'Slide 3 – Background Image', 'type' => 'image', 'default' => 'img/slider/home4-slider3.png'],
+                    'slide_3_bg_image'   => ['label' => 'Slide 3 – Background Image (1521 × 515 px)', 'type' => 'image', 'default' => 'img/slider/home4-slider3.png', 'recommended_size' => '1521 × 515 px'],
                     'slide_3_subtitle'   => ['label' => 'Slide 3 – Subtitle',          'type' => 'text',  'default' => 'As fresh as Fruit'],
                     'slide_3_title'      => ['label' => 'Slide 3 – Main Title',        'type' => 'text',  'default' => 'The Roots Are with fruits'],
                     'slide_3_desc'       => ['label' => 'Slide 3 – Description',       'type' => 'textarea', 'default' => 'The more you love your health, more you eat organic.'],
@@ -56,14 +57,15 @@ class HomeContentController extends Controller
             ],
 
             'banner' => [
-                'label' => 'Banners',
+                'label' => 'Promo Banners',
+                'recommended_size' => '570 × 311 px',
                 'fields' => [
-                    'banner_1_image'     => ['label' => 'Banner 1 – Image',    'type' => 'image', 'default' => 'img/banner/banner10.png'],
+                    'banner_1_image'     => ['label' => 'Banner 1 – Image (570 × 311 px)',    'type' => 'image', 'default' => 'img/banner/banner10.png', 'recommended_size' => '570 × 311 px'],
                     'banner_1_title'     => ['label' => 'Banner 1 – Title',    'type' => 'text',  'default' => '56% off in all products'],
                     'banner_1_btn_text'  => ['label' => 'Banner 1 – Button',   'type' => 'text',  'default' => 'Shop Now'],
                     'banner_1_url'       => ['label' => 'Banner 1 – Link URL', 'type' => 'url',   'default' => '#'],
 
-                    'banner_2_image'     => ['label' => 'Banner 2 – Image',    'type' => 'image', 'default' => 'img/banner/banner11.png'],
+                    'banner_2_image'     => ['label' => 'Banner 2 – Image (570 × 311 px)',    'type' => 'image', 'default' => 'img/banner/banner11.png', 'recommended_size' => '570 × 311 px'],
                     'banner_2_title'     => ['label' => 'Banner 2 – Title',    'type' => 'text',  'default' => '56% off in all products'],
                     'banner_2_btn_text'  => ['label' => 'Banner 2 – Button',   'type' => 'text',  'default' => 'Shop Now'],
                     'banner_2_url'       => ['label' => 'Banner 2 – Link URL', 'type' => 'url',   'default' => '#'],

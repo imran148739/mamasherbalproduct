@@ -26,18 +26,22 @@ class Product extends Model
         'badge',
         'rating',
         'is_featured',
+        'is_best_selling',
+        'best_selling_order',
         'is_active',
         'sort_order',
     ];
 
     protected $casts = [
-        'price'          => 'decimal:2',
-        'old_price'      => 'decimal:2',
-        'stock_quantity' => 'integer',
-        'rating'         => 'decimal:2',
-        'is_featured'    => 'boolean',
-        'is_active'      => 'boolean',
-        'sort_order'     => 'integer',
+        'price'              => 'decimal:2',
+        'old_price'          => 'decimal:2',
+        'stock_quantity'     => 'integer',
+        'rating'             => 'decimal:2',
+        'is_featured'        => 'boolean',
+        'is_best_selling'    => 'boolean',
+        'best_selling_order' => 'integer',
+        'is_active'          => 'boolean',
+        'sort_order'         => 'integer',
     ];
 
     public static function boot()
@@ -108,6 +112,11 @@ class Product extends Model
     public function scopeFeatured($query)
     {
         return $query->where('is_featured', true);
+    }
+
+    public function scopeBestSelling($query)
+    {
+        return $query->where('is_best_selling', true)->orderBy('best_selling_order', 'asc');
     }
 
     public function scopeOrdered($query)
