@@ -13,7 +13,7 @@
                                 </button>
                             </h3>
                             <div class="footer__widget--inner">
-                                <a class="footer__widget--logo" href="index.html"><img src="assets/img/logo/nav-log.png" alt="footer-logo"></a>
+                                <a class="footer__widget--logo" href="{{ route('home') }}"><img src="{{ asset('img/logo/nav-log.png') }}" alt="footer-logo"></a>
                                 <p class="footer__widget--desc text-white m-0">The variety of products available at our store at the moment is vast, but we still continue to widen our assortment.</p>
                                 <ul class="footer__widget--social d-flex">
                                     <li class="footer__widget--social__list">
@@ -142,11 +142,11 @@
                     <div class="col-12 col-md-auto">
                         <div class="footer__payment">
                             <ul class="footer__payment--inner d-flex">
-                                <li class="footer__payment--list"><img src="assets/img/other/payment1.png" alt="payment-img"></li>
-                                <li class="footer__payment--list"><img src="assets/img/other/payment2.png" alt="payment-img"></li>
-                                <li class="footer__payment--list"><img src="assets/img/other/payment3.png" alt="payment-img"></li>
-                                <li class="footer__payment--list"><img src="assets/img/other/payment4.png" alt="payment-img"></li>
-                                <li class="footer__payment--list"><img src="assets/img/other/payment5.png" alt="payment-img"></li>
+                                <li class="footer__payment--list"><img src="{{ asset('img/other/payment1.png') }}" alt="payment-img"></li>
+                                <li class="footer__payment--list"><img src="{{ asset('img/other/payment2.png') }}" alt="payment-img"></li>
+                                <li class="footer__payment--list"><img src="{{ asset('img/other/payment3.png') }}" alt="payment-img"></li>
+                                <li class="footer__payment--list"><img src="{{ asset('img/other/payment4.png') }}" alt="payment-img"></li>
+                                <li class="footer__payment--list"><img src="{{ asset('img/other/payment5.png') }}" alt="payment-img"></li>
                             </ul>
                         </div>
                     </div>
